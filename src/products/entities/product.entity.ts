@@ -1,4 +1,5 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { IsArray } from 'class-validator';
 
 @Entity()
 export class Product {
@@ -44,6 +45,13 @@ export class Product {
     type: 'text'
   })
   gender: string
+
+  @Column({
+    type: 'text',
+    array: true,
+    default: []
+  })
+  tags: string[]
 
   @BeforeInsert()
   validateSlug() {
