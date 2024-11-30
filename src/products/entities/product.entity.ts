@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Product {
@@ -51,9 +51,19 @@ export class Product {
       this.slug = this.title.toLowerCase();
     }
     this.slug = this.slug
-      .replaceAll(' ', '_')
-      .replaceAll("'", '')
+      .toLowerCase()
+      .replaceAll(/[^a-zA-Z0-9\s]/g, '')
+      .replaceAll(/\s+/g, '_')
 
+  }
+
+  @BeforeUpdate()
+  validateUpdateSlug() {
+    if (this.slug) {
+      this.slug = this.slug.toLowerCase()
+        .replaceAll(/[^a-zA-Z0-9\s]/g, '')
+        .replaceAll(/\s+/g, '_')
+    }
   }
 
 }
